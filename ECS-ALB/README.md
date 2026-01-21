@@ -157,6 +157,10 @@ aws ecs register-task-definition \
 
 <img width="1574" height="271" alt="image" src="https://github.com/user-attachments/assets/998d7af5-b097-4c1d-aa86-40efcb4a153e" />
 
+
+
+<img width="1579" height="701" alt="image" src="https://github.com/user-attachments/assets/671622ac-a6f1-4cd9-9e29-e349063b7a23" />
+
 ---
 
 ## 🎧 Listener Configuration
