@@ -237,14 +237,6 @@ aws dynamodb create-table \
 
 ---
 
-## 🔁 Lifecycle & Cost Management
-
-* No lifecycle rules (dev environment)
-* No Intelligent-Tiering
-* No Glacier transitions
-
----
-
 ## 📦 Use Cases
 
 * Raw transaction data
@@ -268,6 +260,175 @@ aws s3api put-bucket-versioning \
 ```
 
 ---
+# 🔄 Lifecycle Management
+
+## 📦 Intelligent-Tiering Configuration
+
+| Setting     | Value                                                                                   |
+| ----------- | --------------------------------------------------------------------------------------- |
+| **Status**  | Enabled                                                                                 |
+| **Scope**   | Entire bucket                                                                           |
+| **Benefit** | Automatically moves objects between frequent and infrequent access tiers based on usage |
+
+This reduces storage costs without impacting performance or availability.
+
+---
+
+## 🗂️ Lifecycle Rules
+
+### 📁 Archive Old Data Rule (`ArchiveOldData`)
+
+| Timeline | Action                       |
+| -------- | ---------------------------- |
+| Day 90   | Transition to `STANDARD_IA`  |
+| Day 180  | Transition to `GLACIER`      |
+| Day 365  | Transition to `DEEP_ARCHIVE` |
+
+* **Prefix:** `archive/`
+* **Purpose:** Progressive cost reduction for aging data
+
+---
+
+### 🧹 Version Cleanup Rule (`DeleteOldVersions`)
+
+| Setting             | Value                                    |
+| ------------------- | ---------------------------------------- |
+| **Noncurrent Days** | 90                                       |
+| **Action**          | Automatically delete old object versions |
+
+Prevents uncontrolled storage growth caused by versioning.
+
+---
+
+# 📊 Server Access Logging
+
+## 🪵 Logging Configuration
+
+| Setting         | Value                                |
+| --------------- | ------------------------------------ |
+| **Log Bucket**  | `fintech-s3-logs-1768864810`         |
+| **Log Prefix**  | `access-logs/`                       |
+| **Log Content** | All requests to the data lake bucket |
+
+### 🔍 Use Cases
+
+* Security auditing
+* Access pattern analysis
+* Compliance and forensics
+
+---
+
+# 💰 Cost Optimization Strategy
+
+The S3 configuration is optimized for **long-term cost efficiency**:
+
+* **Intelligent-Tiering**
+
+  * Automatic cost savings for unpredictable access patterns
+* **Lifecycle Transitions**
+
+  * Gradual movement to cheaper storage classes
+* **Version Cleanup**
+
+  * Prevents excessive storage usage from old object versions
+* **Bucket Key**
+
+  * Reduces AWS KMS request costs by **up to 99%**
+
+---
+
+## 🔧 Commands Used
+
+```bash
+# # Create S3 bucket for data lake
+BUCKET_NAME="fintech-data-lake-$(date +%s)"
+aws s3api create-bucket \
+  --bucket $BUCKET_NAME \
+  --region us-east-1
+
+# Enable versioning
+aws s3api put-bucket-versioning \
+  --bucket $BUCKET_NAME \
+  --versioning-configuration Status=Enabled
+
+# Enable encryption with KMS
+aws s3api put-bucket-encryption \
+  --bucket $BUCKET_NAME \
+  --server-side-encryption-configuration '{
+    "Rules": [{
+      "ApplyServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "aws:kms",
+        "KMSMasterKeyID": "'$KMS_KEY_ID'"
+      },
+      "BucketKeyEnabled": true
+    }]
+  }'
+
+# Block public access
+aws s3api put-public-access-block \
+  --bucket $BUCKET_NAME \
+  --public-access-block-configuration \
+    "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+
+# Enable server access logging
+LOG_BUCKET="fintech-s3-logs-$(date +%s)"
+aws s3api create-bucket --bucket $LOG_BUCKET --region us-east-1
+
+aws s3api put-bucket-logging \
+  --bucket $BUCKET_NAME \
+  --bucket-logging-status '{
+    "LoggingEnabled": {
+      "TargetBucket": "'$LOG_BUCKET'",
+      "TargetPrefix": "access-logs/"
+    }
+  }'
+
+# Create folder structure
+aws s3api put-object --bucket $BUCKET_NAME --key raw/transactions/
+aws s3api put-object --bucket $BUCKET_NAME --key raw/logs/
+aws s3api put-object --bucket $BUCKET_NAME --key raw/events/
+aws s3api put-object --bucket $BUCKET_NAME --key processed/daily-reports/
+aws s3api put-object --bucket $BUCKET_NAME --key processed/aggregations/
+aws s3api put-object --bucket $BUCKET_NAME --key archive/compliance/
+aws s3api put-object --bucket $BUCKET_NAME --key analytics/ml-data/
+
+# Configure lifecycle policy for Intelligent-Tiering
+aws s3api put-bucket-intelligent-tiering-configuration \
+  --bucket $BUCKET_NAME \
+  --id "EntireBucket" \
+  --intelligent-tiering-configuration '{
+    "Status": "Enabled",
+    "Filter": {}
+  }'
+
+# Create lifecycle policy for transitions
+aws s3api put-bucket-lifecycle-configuration \
+  --bucket $BUCKET_NAME \
+  --lifecycle-configuration '{
+    "Rules": [{
+      "Id": "ArchiveOldData",
+      "Status": "Enabled",
+      "Prefix": "archive/",
+      "Transitions": [{
+        "Days": 90,
+        "StorageClass": "STANDARD_IA"
+      }, {
+        "Days": 180,
+        "StorageClass": "GLACIER"
+      }, {
+        "Days": 365,
+        "StorageClass": "DEEP_ARCHIVE"
+      }]
+    }, {
+      "Id": "DeleteOldVersions",
+      "Status": "Enabled",
+      "NoncurrentVersionExpiration": {
+        "NoncurrentDays": 90
+      }
+    }]
+  }'
+```
+
 
 # 🔒 Security Architecture
 
