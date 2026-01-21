@@ -135,6 +135,11 @@ aws ecs register-task-definition \
   --cpu 512 \
   --memory 1024
 ```
+<img width="1499" height="653" alt="image" src="https://github.com/user-attachments/assets/e177c2c6-c384-4092-92f9-db3845d52b9b" />
+
+<img width="1501" height="419" alt="image" src="https://github.com/user-attachments/assets/f2efb857-425b-49ba-a8c9-08cf093d7fd9" />
+
+<img width="1501" height="498" alt="image" src="https://github.com/user-attachments/assets/228c3417-6c8f-4834-a12c-f0241a427041" />
 
 ---
 
@@ -150,6 +155,8 @@ aws ecs register-task-definition \
 | **IP Type**  | IPv4                                                |
 | **DNS Name** | `fintech-alb-692182147.us-east-1.elb.amazonaws.com` |
 
+<img width="1574" height="271" alt="image" src="https://github.com/user-attachments/assets/998d7af5-b097-4c1d-aa86-40efcb4a153e" />
+
 ---
 
 ## 🎧 Listener Configuration
@@ -159,6 +166,9 @@ aws ecs register-task-definition \
 | **Protocol**       | HTTP                        |
 | **Port**           | 80                          |
 | **Default Action** | Forward to `fintech-api-tg` |
+
+
+<img width="1382" height="347" alt="image" src="https://github.com/user-attachments/assets/e297f3ee-5099-4eb7-825c-01624fe8b4f7" />
 
 ---
 
@@ -175,6 +185,9 @@ aws ecs register-task-definition \
 | **Timeout**             | 5s               |
 | **Healthy / Unhealthy** | 2 / 2            |
 
+
+<img width="1588" height="694" alt="image" src="https://github.com/user-attachments/assets/b94504aa-026d-487d-ba6c-31adfd30e33d" />
+
 ---
 
 ## 🔐 Security Configuration
@@ -187,6 +200,8 @@ aws ecs register-task-definition \
 * **Outbound**
 
   * All traffic allowed
+
+<img width="1545" height="254" alt="image" src="https://github.com/user-attachments/assets/611a912f-7808-4737-b190-91d76d496c54" />
 
 ---
 
@@ -278,6 +293,11 @@ for ip in $CLOUDFRONT_IPS; do
     --cidr $ip
 done
 ```
+
+<img width="1523" height="596" alt="image" src="https://github.com/user-attachments/assets/8686e735-263f-4ee8-80d3-a88b8fb0376e" />
+
+
+<img width="735" height="258" alt="image" src="https://github.com/user-attachments/assets/349debcc-a157-4c46-8bcf-7304cf8ad044" />
 
 ---
 
