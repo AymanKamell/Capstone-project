@@ -4,7 +4,7 @@ The data layer implements a **polyglot persistence strategy**, selecting the bes
 
 ## 🧩 Data Stores by Use Case
 
-* **Amazon RDS Aurora PostgreSQL**
+* **Amazon RDS PostgreSQL Multi-AZ**
 
   * ACID-compliant relational database
   * Financial transactions and core business data
@@ -25,41 +25,17 @@ All components are deployed across **multiple Availability Zones** to ensure **h
 
 ---
 
-## 🔄 Data Flow
-
-```text
-ECS Fargate Tasks
-   ↓
-RDS Aurora PostgreSQL (Multi-AZ)
-   ↓
-Financial Data
-   ↓
-ElastiCache Redis (Multi-AZ)
-   ↓
-Session Cache
-   ↓
-DynamoDB (Global Tables-ready)
-   ↓
-Session Storage
-   ↓
-S3 Data Lake
-   ↓
-Analytics & Backup
-```
-
----
-
-# 🗄️ Amazon RDS Aurora PostgreSQL
+# 🗄️ Amazon RDS PostgreSQL
 
 ## 📌 Database Specifications
 
 | Attribute            | Value                               |
 | -------------------- | ----------------------------------- |
-| **Engine**           | Aurora PostgreSQL 15.4              |
+| **Engine**           | PostgreSQL 15.15                    |
 | **Instance Class**   | `db.t4g.micro` (Free Tier eligible) |
 | **Storage**          | 20 GB gp3                           |
 | **Multi-AZ**         | Enabled                             |
-| **Backup Retention** | 7 days                              |
+| **Backup Retention** | 1 days                              |
 | **Monitoring**       | Enhanced monitoring                 |
 | **Database Name**    | `fintech-db`                        |
 
@@ -358,5 +334,3 @@ aws s3api put-bucket-versioning \
 * **S3:** Versioning for accidental deletion protection
 
 ---
-
-You built a **very solid AWS architecture** 👏
