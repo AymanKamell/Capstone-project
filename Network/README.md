@@ -76,6 +76,7 @@ PUBLIC_SUBNET_B=$(aws ec2 create-subnet \
   --availability-zone us-east-1b \
   --query 'Subnet.SubnetId' --output text)
 ```
+<img width="1530" height="555" alt="image" src="https://github.com/user-attachments/assets/165c8954-6c23-485b-aa50-9ffbc16c768c" />
 
 ---
 
@@ -88,6 +89,8 @@ PUBLIC_SUBNET_B=$(aws ec2 create-subnet \
 | **IGW ID**       | `igw-0314349d8ac8eed51`            |
 | **Attached VPC** | `vpc-05ae083309505dd2d`            |
 | **Purpose**      | Internet access for public subnets |
+
+<img width="1604" height="415" alt="image" src="https://github.com/user-attachments/assets/19983771-b4ac-464a-9dea-4e8d940ee13b" />
 
 ## 🔁 NAT Gateway
 
@@ -118,6 +121,7 @@ EIP_ID=$(aws ec2 allocate-address \
   --domain vpc \
   --query 'AllocationId' --output text)
 ```
+<img width="1583" height="384" alt="image" src="https://github.com/user-attachments/assets/ad8dc30c-331f-4327-83d2-4b3a5934fdde" />
 
 ---
 
@@ -131,6 +135,8 @@ EIP_ID=$(aws ec2 allocate-address \
 | **Routes**             | `10.0.0.0/16 → local`<br>`0.0.0.0/0 → IGW` |
 | **Associated Subnets** | Public Subnets A & B                       |
 
+<img width="1562" height="353" alt="image" src="https://github.com/user-attachments/assets/bf3cd7ef-a2a4-49b2-ac3c-bbe62a0765e8" />
+
 ## 🔒 Private Route Table
 
 | Attribute              | Value                                              |
@@ -138,6 +144,8 @@ EIP_ID=$(aws ec2 allocate-address \
 | **Route Table ID**     | `rtb-0c80d8bcfa564bc25`                            |
 | **Routes**             | `10.0.0.0/16 → local`<br>`0.0.0.0/0 → NAT Gateway` |
 | **Associated Subnets** | Private Subnets A & B                              |
+
+<img width="1564" height="372" alt="image" src="https://github.com/user-attachments/assets/cf677e88-215c-4671-9da6-febdd5a0a747" />
 
 ### 🔧 Commands Used
 
@@ -197,7 +205,9 @@ aws ec2 associate-route-table \
   * Default (All)
 
 ---
+<img width="1593" height="471" alt="image" src="https://github.com/user-attachments/assets/1067e4e0-3386-43d6-8626-98f7f52796c3" />
 
+---
 # 🔗 VPC Endpoints
 
 ## 📡 Interface Endpoints
@@ -220,6 +230,7 @@ aws ec2 create-vpc-endpoint \
   --security-group-ids $VPC_ENDPOINT_SG \
   --private-dns-enabled
 ```
+<img width="1582" height="318" alt="image" src="https://github.com/user-attachments/assets/db5340a7-9d69-470b-be23-03a1f96b980b" />
 
 ---
 
