@@ -48,6 +48,8 @@ Root
 
 The **Production OU** hosts the FinTech platform described in this document.
 
+<img width="1252" height="727" alt="orgnization" src="https://github.com/user-attachments/assets/cc489267-5d82-4bd9-adb3-eb1b0c9e2e71" />
+
 ---
 
 ## 2️⃣ Network, Traffic, Compute, and Data Architecture
@@ -73,6 +75,8 @@ The platform runs inside a **dedicated VPC** designed for **multi-AZ high availa
 * Internet access only through controlled entry points
 * AWS service access via **VPC endpoints**
 * Strict security group boundaries
+
+<img width="1530" height="555" alt="vpc" src="https://github.com/user-attachments/assets/0a0342da-a177-4534-ad08-4627d901052f" />
 
 ---
 
@@ -108,6 +112,8 @@ The ALB ensures:
 * Controlled access to backend services
 * Seamless scaling of ECS workloads
 
+<img width="1572" height="692" alt="image" src="https://github.com/user-attachments/assets/651eaa51-0808-4070-b152-0e9e2e619610" />
+
 ---
 
 ### 🐳 Container Platform (ECR + ECS)
@@ -122,6 +128,14 @@ Amazon ECR is the **private container image registry** for the platform.
 * Accessed privately via VPC endpoints
 
 ECR is the **single source of truth** for application artifacts.
+
+<img width="1889" height="702" alt="image" src="https://github.com/user-attachments/assets/c0ee1046-16c0-4d99-a62d-b9e91b980714" />
+
+
+<img width="1554" height="683" alt="image" src="https://github.com/user-attachments/assets/36008bad-2e1b-4422-bd13-fc6b231a3b23" />
+
+
+
 
 ---
 
@@ -139,6 +153,9 @@ ECS:
 * Pulls images securely from ECR
 * Retrieves secrets at runtime
 * Scales automatically across AZs
+
+<img width="1536" height="473" alt="image" src="https://github.com/user-attachments/assets/5926d3be-346b-4b75-a35a-6a3f9813a934" />
+
 
 ---
 
@@ -164,6 +181,10 @@ Used for:
 * Financial transactions
 * Core relational data
 
+<img width="1550" height="718" alt="image" src="https://github.com/user-attachments/assets/a4bc7383-3975-49c0-9c03-262028b6c212" />
+
+<img width="1368" height="201" alt="image" src="https://github.com/user-attachments/assets/e71fe1e8-86ac-4974-85f5-fdceba436d3a" />
+
 ---
 
 #### Amazon ElastiCache Redis (Multi-AZ)
@@ -179,6 +200,11 @@ Used for:
 * Session caching
 * Low-latency reads
 * Performance optimization
+
+<img width="1517" height="734" alt="image" src="https://github.com/user-attachments/assets/f69816d2-fdf1-4e62-9922-712b0d179f2f" />
+
+
+<img width="1540" height="315" alt="image" src="https://github.com/user-attachments/assets/81ca2d99-bcfa-42f9-90bb-547aaf368941" />
 
 ---
 
