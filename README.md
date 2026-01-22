@@ -14,6 +14,8 @@ The platform supports **transaction processing, session management, and real-tim
 
 The architecture follows **AWS Well-Architected Framework principles**, emphasizing isolation, least privilege, encryption, and automation.
 
+<img width="1792" height="1024" alt="updated" src="https://github.com/user-attachments/assets/1f8ef0c9-e2d0-4f9c-9f35-1f6b4c5970a9" />
+
 ---
 
 ### 🏢 AWS Organization Design
