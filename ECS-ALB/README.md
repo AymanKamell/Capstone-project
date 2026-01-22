@@ -336,3 +336,121 @@ done
 * No over-permissioning
 
 ---
+
+# 📦 Amazon Elastic Container Registry (ECR)
+
+## 🧾 Repository Configuration
+
+| Attribute              | Value                     |
+| ---------------------- | ------------------------- |
+| **Repository Name**    | `fintech-api`             |
+| **Region**             | us-east-1                 |
+| **Image Tag Strategy** | `latest` + versioned tags |
+| **Scan on Push**       | Enabled                   |
+| **Encryption**         | AES-256 (AWS managed)     |
+
+---
+
+## 🐋 Container Image Usage
+
+The ECS Fargate service pulls container images directly from Amazon ECR during task startup.
+
+```text
+ECS Task Execution Role
+   ↓
+Authenticate to ECR
+   ↓
+Pull Container Image
+   ↓
+Start Application Container
+```
+
+### Image Reference
+
+```text
+296674251987.dkr.ecr.us-east-1.amazonaws.com/fintech-api:latest
+```
+
+---
+
+## 🔐 Security & Access Control
+
+### 🔑 IAM Integration
+
+Access to ECR is controlled using IAM roles:
+
+#### ECS Task Execution Role Permissions
+
+* `ecr:GetAuthorizationToken`
+* `ecr:BatchCheckLayerAvailability`
+* `ecr:GetDownloadUrlForLayer`
+* `ecr:BatchGetImage`
+
+This ensures **only ECS tasks** can pull images.
+
+---
+
+### 🌐 Private Connectivity
+
+To avoid public internet exposure, ECR access is routed through **VPC interface endpoints**:
+
+* `com.amazonaws.us-east-1.ecr.api`
+* `com.amazonaws.us-east-1.ecr.dkr`
+
+**Benefits:**
+
+* No NAT Gateway dependency
+* Reduced attack surface
+* Lower data transfer costs
+
+---
+
+## 🔄 Image Lifecycle Strategy
+
+| Stage  | Description                               |
+| ------ | ----------------------------------------- |
+| Build  | Image built locally or in CI pipeline     |
+| Push   | Image pushed to private ECR repository    |
+| Deploy | ECS pulls image during task startup       |
+| Update | New image tag triggers rolling deployment |
+
+---
+
+## 🔧 Commands Used
+
+```bash
+# Create ECR repository
+aws ecr create-repository \
+  --repository-name fintech-api \
+  --region us-east-1
+
+# Authenticate Docker to ECR
+aws ecr get-login-password --region us-east-1 \
+  | docker login \
+    --username AWS \
+    --password-stdin 296674251987.dkr.ecr.us-east-1.amazonaws.com
+
+# Build Docker image
+docker build -t fintech-api .
+
+# Tag image
+docker tag fintech-api:latest \
+  296674251987.dkr.ecr.us-east-1.amazonaws.com/fintech-api:latest
+
+# Push image to ECR
+docker push \
+  296674251987.dkr.ecr.us-east-1.amazonaws.com/fintech-api:latest
+```
+
+---
+
+## 🧠 Architectural Benefits of Using ECR
+
+* 🔒 **Private Registry** – No public Docker Hub dependency
+* ⚡ **Low Latency** – Same-region image pulls
+* 🧩 **Native AWS Integration** – IAM, ECS, CloudWatch
+* 💰 **Cost Efficient** – No outbound internet traffic
+* 📈 **Scalable** – Supports rapid deployment cycles
+
+---
+
