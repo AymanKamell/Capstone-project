@@ -1,4 +1,4 @@
-# FinTech API – Docker Build & ECR Deployment Guide
+# Docker Build & ECR Deployment Guide
 
 This directory contains the source code and Docker configuration for the **FinTech API** service.
 The application is a Python Flask API designed to run on **Amazon ECS (Fargate)** and integrate with
@@ -160,7 +160,4 @@ You can run the container locally (limited functionality without AWS credentials
 
 ```bash
 docker run -p 8080:8080 fintech-api:latest
-```
-
-Just tell me 👌
 ```
